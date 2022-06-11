@@ -168,4 +168,31 @@ class EmailNotificationTest extends TestCase
         Mail::assertSent(GenericMailer::class);
     }
 
+    public function testCanGetEmailsByReceiver() {
+        Mail::fake();
+        $attributes = [
+            'from' => 'xyz@gmail.com',
+            'from_name' => 'idris',
+            'to' => 'abc@gmail.com',
+            'subject' => 'a test',
+            'body' => 'test body',
+            'attachments' => [new File(base_path('tests/resources/testFile.txt'))]
+        ];
+        $response = $this->post('/api/emails', $attributes);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertSeeText('Email posted successfully');
+
+        $data = $response->decodeResponseJson();
+        $data = $data['data'];
+
+        $response = $this->get('/api/emails/receiver?receiver='.$data['receiver']);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertSeeText('Emails fetched successfully');
+        $data = $response->decodeResponseJson();
+        $data = $data['data'];
+        $this->assertNotEmpty($data);
+        $this->assertEquals(1, count($data));
+        Mail::assertSent(GenericMailer::class);
+    }
+
 }

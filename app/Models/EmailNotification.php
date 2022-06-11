@@ -88,4 +88,8 @@ class EmailNotification extends Model
             'countFailed' => $countFailed
         ];
     }
+
+    public static function getByReceiver($receiver) {
+        return static::where('receiver', $receiver)->get();
+    }
 }

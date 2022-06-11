@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('emails')->group(function() {
+    Route::get('/receiver', [\App\Http\Controllers\Api\EmailNotificationController::class, 'getEmailsByReceiver']);
     Route::get('/stats', [\App\Http\Controllers\Api\EmailNotificationController::class, 'getEmailStats']);
     Route::get('', [\App\Http\Controllers\Api\EmailNotificationController::class, 'getAll']);
     Route::get('{uuid}', [\App\Http\Controllers\Api\EmailNotificationController::class, 'get']);

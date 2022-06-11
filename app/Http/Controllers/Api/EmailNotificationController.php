@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class EmailNotificationController extends Controller
 {
-    const DEFAULT_PAGE = 10;
+    const DEFAULT_PAGE = 100;
 
     public function getAll(Request $request) {
         try {
@@ -74,6 +74,23 @@ class EmailNotificationController extends Controller
         try {
             $stats = EmailNotification::getStats();
             return $this->sendApiResponse(Response::HTTP_OK, __('Stats fetched successfully'), $stats);
+        } catch (Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return $this->sendApiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, __('An error occured while fetching'));
+        }
+    }
+
+    public function getEmailsByReceiver(Request $request) {
+        try {
+            $validator = Validator::make($request->only('receiver'), [
+                'receiver' => 'string|required'
+            ]);
+
+            if($validator->fails()) {
+                return $this->sendApiResponse(Response::HTTP_UNPROCESSABLE_ENTITY, __('validation failed'), null, $validator->errors());
+            }
+            $emails = EmailNotification::getByReceiver($request->receiver);
+            return $this->sendApiResponse(Response::HTTP_OK, __('Emails fetched successfully'), $emails);
         } catch (Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
             return $this->sendApiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, __('An error occured while fetching'));
