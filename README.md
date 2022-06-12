@@ -14,6 +14,10 @@ To Startup the app, make sure you have docker running, then run the command belo
 ```
 All required services such as database, cache etc. will be spun up on start.
 
+## Documentation
+
+The documentation for this project can be found in the reference folder in Open API (swagger) format.
+
 ## Security Vulnerabilities
 
 If you discover a security vulnerability within Minisend, please send an e-mail to Idris Lawal via [idriseun222@gmail.com](idriseun222@gmail.com). All security vulnerabilities will be promptly addressed.

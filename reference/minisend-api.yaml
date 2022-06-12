@@ -1,0 +1,2141 @@
+openapi: 3.1.0
+info:
+  title: minisend-api
+  version: '1.0'
+servers:
+  - url: 'http://localhost:80'
+paths:
+  '/emails/{uuid}':
+    parameters:
+      - schema:
+          type: integer
+        name: uuid
+        in: path
+        required: true
+        description: Email notification uuid.
+    get:
+      summary: Get A Single Email Notification Entry
+      tags: []
+      responses:
+        '200':
+          description: Email notification found
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      uuid:
+                        type: string
+                        minLength: 1
+                      sender:
+                        type: string
+                        minLength: 1
+                      receiver:
+                        type: string
+                        minLength: 1
+                      subject:
+                        type: string
+                        minLength: 1
+                      body:
+                        type: string
+                        minLength: 1
+                      html_body: {}
+                      sent_at: {}
+                      retry_at: {}
+                      created_at:
+                        type: string
+                        minLength: 1
+                      updated_at:
+                        type: string
+                        minLength: 1
+                      status:
+                        type: string
+                        minLength: 1
+                      attachments:
+                        type: array
+                        items:
+                          required: []
+                          properties: {}
+                    required:
+                      - id
+                      - uuid
+                      - sender
+                      - receiver
+                      - subject
+                      - body
+                      - created_at
+                      - updated_at
+                      - status
+                      - attachments
+                  errors: {}
+                required:
+                  - message
+                  - data
+                x-examples:
+                  example-1:
+                    message: Record retrieved successfully
+                    data:
+                      id: 1
+                      uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                      sender: idris@idris.co
+                      receiver: lawal@lawal.co
+                      subject: Test email
+                      body: I am testing this
+                      html_body: null
+                      sent_at: null
+                      retry_at: null
+                      created_at: '2022-06-09T22:38:48.000000Z'
+                      updated_at: '2022-06-09T22:38:48.000000Z'
+                      status: posted
+                      attachments: []
+                    errors: null
+              examples:
+                Get User Alice Smith:
+                  value:
+                    id: 142
+                    firstName: Alice
+                    lastName: Smith
+                    email: alice.smith@gmail.com
+                    dateOfBirth: '1997-10-31'
+                    emailVerified: true
+                    signUpDate: '2019-08-24'
+                example response:
+                  value:
+                    message: Record retrieved successfully
+                    data:
+                      id: 1
+                      uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                      sender: idris@idris.co
+                      receiver: lawal@lawal.co
+                      subject: Test email
+                      body: I am testing this
+                      html_body: null
+                      sent_at: null
+                      retry_at: null
+                      created_at: '2022-06-09T22:38:48.000000Z'
+                      updated_at: '2022-06-09T22:38:48.000000Z'
+                      status: posted
+                      attachments: []
+                    errors: null
+        '404':
+          description: Email not found
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  data: {}
+                  errors: {}
+                required:
+                  - message
+                x-examples:
+                  example-1:
+                    message: Record not found
+                    data: null
+                    errors: null
+              examples:
+                example when not found:
+                  value:
+                    message: Record not found
+                    data: null
+                    errors: null
+      operationId: get-emails-uuid
+      description: Retrieve the information of the email notification with the matching Email notification UUID.
+    patch:
+      summary: Update User Information
+      operationId: patch-users-userId
+      responses:
+        '200':
+          description: User Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Updated User Rebecca Baker:
+                  value:
+                    id: 13
+                    firstName: Rebecca
+                    lastName: Baker
+                    email: rebecca@gmail.com
+                    dateOfBirth: '1985-10-02'
+                    emailVerified: false
+                    createDate: '2019-08-24'
+        '404':
+          description: User Not Found
+        '409':
+          description: Email Already Taken
+      description: Update the information of an existing user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                  description: 'If a new email is given, the user''s email verified property will be set to false.'
+                dateOfBirth:
+                  type: string
+            examples:
+              Update First Name:
+                value:
+                  firstName: Rebecca
+              Update Email:
+                value:
+                  email: rebecca@gmail.com
+              Update Last Name & Date of Birth:
+                value:
+                  lastName: Baker
+                  dateOfBirth: '1985-10-02'
+        description: Patch user properties to update.
+  /emails:
+    post:
+      summary: Create New User
+      operationId: post-emails
+      responses:
+        '201':
+          description: Email notification Created
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  data:
+                    type: object
+                    properties:
+                      uuid:
+                        type: string
+                        minLength: 1
+                      sender:
+                        type: string
+                        minLength: 1
+                      receiver:
+                        type: string
+                        minLength: 1
+                      subject:
+                        type: string
+                        minLength: 1
+                      body:
+                        type: string
+                        minLength: 1
+                      html_body:
+                        type: string
+                        minLength: 1
+                      updated_at:
+                        type: string
+                        minLength: 1
+                      created_at:
+                        type: string
+                        minLength: 1
+                      id:
+                        type: number
+                    required:
+                      - uuid
+                      - sender
+                      - receiver
+                      - subject
+                      - body
+                      - html_body
+                      - updated_at
+                      - created_at
+                      - id
+                  errors: {}
+                required:
+                  - message
+                  - data
+                x-examples:
+                  example-1:
+                    message: Email posted successfully
+                    data:
+                      uuid: a9bbd7c6-146c-4b9b-9da9-bd4bf7881b0e
+                      sender: idris@idris.co
+                      receiver: lawal@lawal.co
+                      subject: Test email 2
+                      body: I am testing this 2
+                      html_body: <b>I am a strong text</b>
+                      updated_at: '2022-06-12T12:04:44.000000Z'
+                      created_at: '2022-06-12T12:04:44.000000Z'
+                      id: 45
+                    errors: null
+              examples:
+                New User Bob Fellow:
+                  value:
+                    id: 12
+                    firstName: Bob
+                    lastName: Fellow
+                    email: bob.fellow@gmail.com
+                    dateOfBirth: '1996-08-24'
+                    emailVerified: false
+                    createDate: '2020-11-18'
+                example-1:
+                  value:
+                    message: Email posted successfully
+                    data:
+                      uuid: a9bbd7c6-146c-4b9b-9da9-bd4bf7881b0e
+                      sender: idris@idris.co
+                      receiver: lawal@lawal.co
+                      subject: Test email 2
+                      body: I am testing this 2
+                      html_body: <b>I am a strong text</b>
+                      updated_at: '2022-06-12T12:04:44.000000Z'
+                      created_at: '2022-06-12T12:04:44.000000Z'
+                      id: 45
+                    errors: null
+        '422':
+          description: Validation failure
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  data: {}
+                  errors:
+                    type: object
+                    properties:
+                      from:
+                        type: array
+                        items:
+                          required: []
+                          properties: {}
+                    required:
+                      - from
+                required:
+                  - message
+                  - errors
+                x-examples:
+                  example-1:
+                    message: validation failed
+                    data: null
+                    errors:
+                      from:
+                        - The from field is required.
+              examples:
+                example-1:
+                  value:
+                    message: validation failed
+                    data: null
+                    errors:
+                      from:
+                        - The from field is required.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                from:
+                  type: string
+                  minLength: 1
+                to:
+                  type: string
+                  minLength: 1
+                subject:
+                  type: string
+                  minLength: 1
+                body:
+                  type: string
+                  minLength: 1
+                html_body:
+                  type: string
+                  minLength: 1
+                from_name:
+                  type: string
+                  minLength: 1
+              required:
+                - from
+                - to
+                - subject
+                - body
+                - html_body
+                - from_name
+              x-examples:
+                example-1:
+                  from: idris@idris.co
+                  to: lawal@lawal.co
+                  subject: Test email 2
+                  body: I am testing this 2
+                  html_body: <b>I am a strong text</b>
+                  from_name: Idris
+            examples:
+              Create User Bob Fellow:
+                value:
+                  firstName: Bob
+                  lastName: Fellow
+                  email: bob.fellow@gmail.com
+                  dateOfBirth: '1996-08-24'
+              example-body:
+                value:
+                  from: idris@idris.co
+                  to: lawal@lawal.co
+                  subject: Test email 2
+                  body: I am testing this 2
+                  html_body: <b>I am a strong text</b>
+                  from_name: Idris
+        description: Post the necessary fields for the API to create a new email notification.
+      description: Create a new email notification.
+    parameters: []
+  /emails/:
+    get:
+      summary: Get all email notifications
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  data:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      required:
+                        - id
+                        - uuid
+                        - sender
+                        - receiver
+                        - subject
+                        - body
+                        - created_at
+                        - updated_at
+                        - status
+                      properties:
+                        id:
+                          type: number
+                        uuid:
+                          type: string
+                          minLength: 1
+                        sender:
+                          type: string
+                          minLength: 1
+                        receiver:
+                          type: string
+                          minLength: 1
+                        subject:
+                          type: string
+                          minLength: 1
+                        body:
+                          type: string
+                          minLength: 1
+                        html_body: {}
+                        sent_at: {}
+                        retry_at: {}
+                        created_at:
+                          type: string
+                          minLength: 1
+                        updated_at:
+                          type: string
+                          minLength: 1
+                        status:
+                          type: string
+                          minLength: 1
+                        attachments:
+                          type: array
+                          items:
+                            required: []
+                            properties: {}
+                  errors: {}
+                required:
+                  - message
+                  - data
+                x-examples:
+                  example-1:
+                    message: Records retrieved successfully
+                    data:
+                      - id: 1
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email
+                        body: I am testing this
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:38:48.000000Z'
+                        updated_at: '2022-06-09T22:38:48.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 2
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:45:38.000000Z'
+                        updated_at: '2022-06-09T22:45:38.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 4
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:48:12.000000Z'
+                        updated_at: '2022-06-09T22:48:12.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 8
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:49:45.000000Z'
+                        updated_at: '2022-06-09T22:49:45.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 9
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:50:14.000000Z'
+                        updated_at: '2022-06-09T22:50:14.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 11
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:52:44.000000Z'
+                        updated_at: '2022-06-09T22:52:44.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 1
+                            email_notification_id: 11
+                            file_path: emails/attachments/7N3RGjEGyy0brATKvexsE6zgvFGazcXIZWzq0ED9.txt
+                            created_at: '2022-06-09T22:52:44.000000Z'
+                            updated_at: '2022-06-09T22:52:44.000000Z'
+                      - id: 12
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T23:52:58.000000Z'
+                        updated_at: '2022-06-09T23:52:58.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 2
+                            email_notification_id: 12
+                            file_path: emails/attachments/Dg2yRgyVeoLj8l05g15mKYoSXasCocsEQcdfG1O9.txt
+                            created_at: '2022-06-09T23:52:58.000000Z'
+                            updated_at: '2022-06-09T23:52:58.000000Z'
+                      - id: 13
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T23:54:12.000000Z'
+                        updated_at: '2022-06-09T23:54:12.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 3
+                            email_notification_id: 13
+                            file_path: emails/attachments/PCplTOZXJBiJgPbU9jcKesZqYQBshTbz9iJpEwue.txt
+                            created_at: '2022-06-09T23:54:12.000000Z'
+                            updated_at: '2022-06-09T23:54:12.000000Z'
+                      - id: 14
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T23:54:25.000000Z'
+                        updated_at: '2022-06-09T23:54:25.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 4
+                            email_notification_id: 14
+                            file_path: emails/attachments/oZdhh2EZPdCuTui4rEXywFFsbWCTf8rfnBUUJXch.txt
+                            created_at: '2022-06-09T23:54:25.000000Z'
+                            updated_at: '2022-06-09T23:54:25.000000Z'
+                      - id: 15
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T23:56:34.000000Z'
+                        updated_at: '2022-06-09T23:56:34.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 5
+                            email_notification_id: 15
+                            file_path: emails/attachments/1VFlcOLNCcg8YZEPstWUCF1Lu3CsYkhjk7wgpLgk.txt
+                            created_at: '2022-06-09T23:56:34.000000Z'
+                            updated_at: '2022-06-09T23:56:34.000000Z'
+                      - id: 16
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T23:56:44.000000Z'
+                        updated_at: '2022-06-09T23:56:44.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 6
+                            email_notification_id: 16
+                            file_path: emails/attachments/Ln4LShPPVPNxR7r5rZ5FoYNePGCBNjWZlrtj7QaR.txt
+                            created_at: '2022-06-09T23:56:44.000000Z'
+                            updated_at: '2022-06-09T23:56:44.000000Z'
+                      - id: 17
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:00:11.000000Z'
+                        updated_at: '2022-06-10T00:00:11.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 7
+                            email_notification_id: 17
+                            file_path: emails/attachments/UiszOqkCNZv1JWD6AtP6g0zpgZ88O9y8Gc9WPi8g.txt
+                            created_at: '2022-06-10T00:00:11.000000Z'
+                            updated_at: '2022-06-10T00:00:11.000000Z'
+                      - id: 18
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:00:58.000000Z'
+                        updated_at: '2022-06-10T00:00:58.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 8
+                            email_notification_id: 18
+                            file_path: emails/attachments/xdwLJuLY8ODX1LTbuZ2vzwmM2O7J75CqOmVRXkEZ.txt
+                            created_at: '2022-06-10T00:00:58.000000Z'
+                            updated_at: '2022-06-10T00:00:58.000000Z'
+                      - id: 19
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:01:59.000000Z'
+                        updated_at: '2022-06-10T00:01:59.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 9
+                            email_notification_id: 19
+                            file_path: emails/attachments/aXeegfo4JlI8JRmrsVnhaILjx7a7VHleG7eAlfGh.txt
+                            created_at: '2022-06-10T00:01:59.000000Z'
+                            updated_at: '2022-06-10T00:01:59.000000Z'
+                      - id: 20
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:02:54.000000Z'
+                        updated_at: '2022-06-10T00:02:54.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 10
+                            email_notification_id: 20
+                            file_path: emails/attachments/9xjE3RD70LRsU6CpxLSNhCtl2tTHjx3WB7TlsB0i.txt
+                            created_at: '2022-06-10T00:02:54.000000Z'
+                            updated_at: '2022-06-10T00:02:54.000000Z'
+                      - id: 21
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:03:14.000000Z'
+                        updated_at: '2022-06-10T00:03:14.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 11
+                            email_notification_id: 21
+                            file_path: emails/attachments/TT6EA9dYfVKMMOWKcq5P7D7ZnRVzjuygRXHPNqmb.txt
+                            created_at: '2022-06-10T00:03:14.000000Z'
+                            updated_at: '2022-06-10T00:03:14.000000Z'
+                      - id: 22
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:04:31.000000Z'
+                        updated_at: '2022-06-10T00:04:31.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 12
+                            email_notification_id: 22
+                            file_path: emails/attachments/OFPEg1dkRaufDt40Lt4zzAgyFI41RCCNRxuFGcUa.txt
+                            created_at: '2022-06-10T00:04:31.000000Z'
+                            updated_at: '2022-06-10T00:04:31.000000Z'
+                      - id: 23
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:04:43.000000Z'
+                        updated_at: '2022-06-10T00:04:43.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 13
+                            email_notification_id: 23
+                            file_path: emails/attachments/iZucZzlEShRmmzyazPD5wHFrp6QQvNscHHl2c2ZY.txt
+                            created_at: '2022-06-10T00:04:43.000000Z'
+                            updated_at: '2022-06-10T00:04:43.000000Z'
+                      - id: 24
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:06:11.000000Z'
+                        updated_at: '2022-06-10T00:06:11.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 14
+                            email_notification_id: 24
+                            file_path: emails/attachments/koJr9D0bYkZeegpTkzd5xZbHMSTFn01v6uV9kVl8.txt
+                            created_at: '2022-06-10T00:06:11.000000Z'
+                            updated_at: '2022-06-10T00:06:11.000000Z'
+                      - id: 25
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:07:57.000000Z'
+                        updated_at: '2022-06-10T00:07:57.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 15
+                            email_notification_id: 25
+                            file_path: emails/attachments/5mbfdGV7FNRSohjs2ltP1MoOWIft2g4LlfOJd1vV.txt
+                            created_at: '2022-06-10T00:07:57.000000Z'
+                            updated_at: '2022-06-10T00:07:57.000000Z'
+                      - id: 26
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:08:16.000000Z'
+                        updated_at: '2022-06-10T00:08:16.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 16
+                            email_notification_id: 26
+                            file_path: emails/attachments/lzyNVjIqm66he60hpaecahy94LS3nMbfBLrIFAYG.txt
+                            created_at: '2022-06-10T00:08:16.000000Z'
+                            updated_at: '2022-06-10T00:08:16.000000Z'
+                      - id: 27
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:08:50.000000Z'
+                        updated_at: '2022-06-10T00:08:50.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 17
+                            email_notification_id: 27
+                            file_path: emails/attachments/gbi3LhLv22hUI4C8iogOFuLqAPs5zd1iAMCRJ5yg.txt
+                            created_at: '2022-06-10T00:08:50.000000Z'
+                            updated_at: '2022-06-10T00:08:50.000000Z'
+                      - id: 28
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:09:16.000000Z'
+                        updated_at: '2022-06-10T00:09:16.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 18
+                            email_notification_id: 28
+                            file_path: emails/attachments/KhiGUSioNKkQ9iEkt7Ersbhg8ayTrlSbuXeYfl0J.txt
+                            created_at: '2022-06-10T00:09:16.000000Z'
+                            updated_at: '2022-06-10T00:09:16.000000Z'
+                      - id: 29
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:15:43.000000Z'
+                        updated_at: '2022-06-10T00:15:43.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 19
+                            email_notification_id: 29
+                            file_path: emails/attachments/sscb9XPOjEBAYB8xpMag5Obx5ODfmcMU1LywhiH6.txt
+                            created_at: '2022-06-10T00:15:43.000000Z'
+                            updated_at: '2022-06-10T00:15:43.000000Z'
+                      - id: 30
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:19:54.000000Z'
+                        updated_at: '2022-06-10T00:19:54.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 20
+                            email_notification_id: 30
+                            file_path: emails/attachments/n8NRuZCMQZq9NxBGG7JLDpxgzNMyE4GDyeFgEEt2.txt
+                            created_at: '2022-06-10T00:19:54.000000Z'
+                            updated_at: '2022-06-10T00:19:54.000000Z'
+                      - id: 31
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:20:32.000000Z'
+                        updated_at: '2022-06-10T00:20:32.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 21
+                            email_notification_id: 31
+                            file_path: emails/attachments/OctPXPt0kE8tfVsXVjMvClCwThrVv5un0TwMaxZg.txt
+                            created_at: '2022-06-10T00:20:32.000000Z'
+                            updated_at: '2022-06-10T00:20:32.000000Z'
+                      - id: 32
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:20:52.000000Z'
+                        updated_at: '2022-06-10T00:20:52.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 22
+                            email_notification_id: 32
+                            file_path: emails/attachments/XRlsOAJi6A2fYskAS1OeXKKMzxzxrLtSU15TucPG.txt
+                            created_at: '2022-06-10T00:20:53.000000Z'
+                            updated_at: '2022-06-10T00:20:53.000000Z'
+                      - id: 33
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:21:13.000000Z'
+                        updated_at: '2022-06-10T00:21:13.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 23
+                            email_notification_id: 33
+                            file_path: emails/attachments/NXZmpE0pnqBq1g7CU5WzAiYTw04v8z8DcBjvAhk0.txt
+                            created_at: '2022-06-10T00:21:13.000000Z'
+                            updated_at: '2022-06-10T00:21:13.000000Z'
+                      - id: 34
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:21:28.000000Z'
+                        updated_at: '2022-06-10T00:21:28.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 24
+                            email_notification_id: 34
+                            file_path: emails/attachments/GQ2RlDtgRXqLsuHYKCyBdiNyXl2ZtNYfDhY0W4Ip.txt
+                            created_at: '2022-06-10T00:21:29.000000Z'
+                            updated_at: '2022-06-10T00:21:29.000000Z'
+                      - id: 35
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:24:57.000000Z'
+                        updated_at: '2022-06-10T00:24:57.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 25
+                            email_notification_id: 35
+                            file_path: emails/attachments/drbgj2FMu8d9cyOTQ92hP7hJQ1tsOFNnvk7j7TnZ.txt
+                            created_at: '2022-06-10T00:24:57.000000Z'
+                            updated_at: '2022-06-10T00:24:57.000000Z'
+                      - id: 36
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:52:43.000000Z'
+                        updated_at: '2022-06-10T00:52:43.000000Z'
+                        status: failed
+                        attachments:
+                          - id: 26
+                            email_notification_id: 36
+                            file_path: emails/attachments/Awn3d8dQVN9X8UIe4k3FlwSHr4Y5nVRkTFxcvqvE.txt
+                            created_at: '2022-06-10T00:52:43.000000Z'
+                            updated_at: '2022-06-10T00:52:43.000000Z'
+                      - id: 37
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:53:01.000000Z'
+                        updated_at: '2022-06-10T00:53:01.000000Z'
+                        status: failed
+                        attachments:
+                          - id: 27
+                            email_notification_id: 37
+                            file_path: emails/attachments/ryArvLWtO1U5jO3CcT4g1Vc70FO8dPIw0F64TbbA.txt
+                            created_at: '2022-06-10T00:53:01.000000Z'
+                            updated_at: '2022-06-10T00:53:01.000000Z'
+                      - id: 38
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:58:51.000000Z'
+                        updated_at: '2022-06-10T00:58:56.000000Z'
+                        status: sent
+                        attachments:
+                          - id: 28
+                            email_notification_id: 38
+                            file_path: emails/attachments/EFk1mmRnolBA4k0cgQK6vbsnxf2xoAEqSQMiG61d.txt
+                            created_at: '2022-06-10T00:58:51.000000Z'
+                            updated_at: '2022-06-10T00:58:51.000000Z'
+                      - id: 39
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:02:30.000000Z'
+                        updated_at: '2022-06-10T01:02:34.000000Z'
+                        status: sent
+                        attachments:
+                          - id: 29
+                            email_notification_id: 39
+                            file_path: emails/attachments/DXVrecQRQyHIIAm71ghF6m8tZ4yoW6f1b29qq16I.txt
+                            created_at: '2022-06-10T01:02:30.000000Z'
+                            updated_at: '2022-06-10T01:02:30.000000Z'
+                      - id: 40
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:05:19.000000Z'
+                        updated_at: '2022-06-10T01:05:23.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 41
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:26:43.000000Z'
+                        updated_at: '2022-06-10T01:26:46.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 42
+                        uuid: 37a6dfcc-0c0d-4b90-ae79-19dee1c89f5e
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:27:49.000000Z'
+                        updated_at: '2022-06-10T01:27:53.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 43
+                        uuid: 4ea41868-2d6f-4cbb-a0e5-e9f9c8bae95d
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:03:13.000000Z'
+                        updated_at: '2022-06-12T12:03:14.000000Z'
+                        status: failed
+                        attachments: []
+                      - id: 44
+                        uuid: 4d4fb985-4265-4009-8762-2a0a97cab07c
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:03:39.000000Z'
+                        updated_at: '2022-06-12T12:03:39.000000Z'
+                        status: failed
+                        attachments: []
+                      - id: 45
+                        uuid: a9bbd7c6-146c-4b9b-9da9-bd4bf7881b0e
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:04:44.000000Z'
+                        updated_at: '2022-06-12T12:04:44.000000Z'
+                        status: posted
+                        attachments: []
+                    errors: null
+              examples:
+                example-1:
+                  value:
+                    message: Records retrieved successfully
+                    data:
+                      - id: 1
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email
+                        body: I am testing this
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:38:48.000000Z'
+                        updated_at: '2022-06-09T22:38:48.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 2
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:45:38.000000Z'
+                        updated_at: '2022-06-09T22:45:38.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 4
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:48:12.000000Z'
+                        updated_at: '2022-06-09T22:48:12.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 8
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:49:45.000000Z'
+                        updated_at: '2022-06-09T22:49:45.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 9
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:50:14.000000Z'
+                        updated_at: '2022-06-09T22:50:14.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 11
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:52:44.000000Z'
+                        updated_at: '2022-06-09T22:52:44.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 1
+                            email_notification_id: 11
+                            file_path: emails/attachments/7N3RGjEGyy0brATKvexsE6zgvFGazcXIZWzq0ED9.txt
+                            created_at: '2022-06-09T22:52:44.000000Z'
+                            updated_at: '2022-06-09T22:52:44.000000Z'
+                      - id: 12
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T23:52:58.000000Z'
+                        updated_at: '2022-06-09T23:52:58.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 2
+                            email_notification_id: 12
+                            file_path: emails/attachments/Dg2yRgyVeoLj8l05g15mKYoSXasCocsEQcdfG1O9.txt
+                            created_at: '2022-06-09T23:52:58.000000Z'
+                            updated_at: '2022-06-09T23:52:58.000000Z'
+                      - id: 13
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T23:54:12.000000Z'
+                        updated_at: '2022-06-09T23:54:12.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 3
+                            email_notification_id: 13
+                            file_path: emails/attachments/PCplTOZXJBiJgPbU9jcKesZqYQBshTbz9iJpEwue.txt
+                            created_at: '2022-06-09T23:54:12.000000Z'
+                            updated_at: '2022-06-09T23:54:12.000000Z'
+                      - id: 14
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T23:54:25.000000Z'
+                        updated_at: '2022-06-09T23:54:25.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 4
+                            email_notification_id: 14
+                            file_path: emails/attachments/oZdhh2EZPdCuTui4rEXywFFsbWCTf8rfnBUUJXch.txt
+                            created_at: '2022-06-09T23:54:25.000000Z'
+                            updated_at: '2022-06-09T23:54:25.000000Z'
+                      - id: 15
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T23:56:34.000000Z'
+                        updated_at: '2022-06-09T23:56:34.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 5
+                            email_notification_id: 15
+                            file_path: emails/attachments/1VFlcOLNCcg8YZEPstWUCF1Lu3CsYkhjk7wgpLgk.txt
+                            created_at: '2022-06-09T23:56:34.000000Z'
+                            updated_at: '2022-06-09T23:56:34.000000Z'
+                      - id: 16
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T23:56:44.000000Z'
+                        updated_at: '2022-06-09T23:56:44.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 6
+                            email_notification_id: 16
+                            file_path: emails/attachments/Ln4LShPPVPNxR7r5rZ5FoYNePGCBNjWZlrtj7QaR.txt
+                            created_at: '2022-06-09T23:56:44.000000Z'
+                            updated_at: '2022-06-09T23:56:44.000000Z'
+                      - id: 17
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:00:11.000000Z'
+                        updated_at: '2022-06-10T00:00:11.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 7
+                            email_notification_id: 17
+                            file_path: emails/attachments/UiszOqkCNZv1JWD6AtP6g0zpgZ88O9y8Gc9WPi8g.txt
+                            created_at: '2022-06-10T00:00:11.000000Z'
+                            updated_at: '2022-06-10T00:00:11.000000Z'
+                      - id: 18
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:00:58.000000Z'
+                        updated_at: '2022-06-10T00:00:58.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 8
+                            email_notification_id: 18
+                            file_path: emails/attachments/xdwLJuLY8ODX1LTbuZ2vzwmM2O7J75CqOmVRXkEZ.txt
+                            created_at: '2022-06-10T00:00:58.000000Z'
+                            updated_at: '2022-06-10T00:00:58.000000Z'
+                      - id: 19
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:01:59.000000Z'
+                        updated_at: '2022-06-10T00:01:59.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 9
+                            email_notification_id: 19
+                            file_path: emails/attachments/aXeegfo4JlI8JRmrsVnhaILjx7a7VHleG7eAlfGh.txt
+                            created_at: '2022-06-10T00:01:59.000000Z'
+                            updated_at: '2022-06-10T00:01:59.000000Z'
+                      - id: 20
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:02:54.000000Z'
+                        updated_at: '2022-06-10T00:02:54.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 10
+                            email_notification_id: 20
+                            file_path: emails/attachments/9xjE3RD70LRsU6CpxLSNhCtl2tTHjx3WB7TlsB0i.txt
+                            created_at: '2022-06-10T00:02:54.000000Z'
+                            updated_at: '2022-06-10T00:02:54.000000Z'
+                      - id: 21
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:03:14.000000Z'
+                        updated_at: '2022-06-10T00:03:14.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 11
+                            email_notification_id: 21
+                            file_path: emails/attachments/TT6EA9dYfVKMMOWKcq5P7D7ZnRVzjuygRXHPNqmb.txt
+                            created_at: '2022-06-10T00:03:14.000000Z'
+                            updated_at: '2022-06-10T00:03:14.000000Z'
+                      - id: 22
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:04:31.000000Z'
+                        updated_at: '2022-06-10T00:04:31.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 12
+                            email_notification_id: 22
+                            file_path: emails/attachments/OFPEg1dkRaufDt40Lt4zzAgyFI41RCCNRxuFGcUa.txt
+                            created_at: '2022-06-10T00:04:31.000000Z'
+                            updated_at: '2022-06-10T00:04:31.000000Z'
+                      - id: 23
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:04:43.000000Z'
+                        updated_at: '2022-06-10T00:04:43.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 13
+                            email_notification_id: 23
+                            file_path: emails/attachments/iZucZzlEShRmmzyazPD5wHFrp6QQvNscHHl2c2ZY.txt
+                            created_at: '2022-06-10T00:04:43.000000Z'
+                            updated_at: '2022-06-10T00:04:43.000000Z'
+                      - id: 24
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:06:11.000000Z'
+                        updated_at: '2022-06-10T00:06:11.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 14
+                            email_notification_id: 24
+                            file_path: emails/attachments/koJr9D0bYkZeegpTkzd5xZbHMSTFn01v6uV9kVl8.txt
+                            created_at: '2022-06-10T00:06:11.000000Z'
+                            updated_at: '2022-06-10T00:06:11.000000Z'
+                      - id: 25
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:07:57.000000Z'
+                        updated_at: '2022-06-10T00:07:57.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 15
+                            email_notification_id: 25
+                            file_path: emails/attachments/5mbfdGV7FNRSohjs2ltP1MoOWIft2g4LlfOJd1vV.txt
+                            created_at: '2022-06-10T00:07:57.000000Z'
+                            updated_at: '2022-06-10T00:07:57.000000Z'
+                      - id: 26
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:08:16.000000Z'
+                        updated_at: '2022-06-10T00:08:16.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 16
+                            email_notification_id: 26
+                            file_path: emails/attachments/lzyNVjIqm66he60hpaecahy94LS3nMbfBLrIFAYG.txt
+                            created_at: '2022-06-10T00:08:16.000000Z'
+                            updated_at: '2022-06-10T00:08:16.000000Z'
+                      - id: 27
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:08:50.000000Z'
+                        updated_at: '2022-06-10T00:08:50.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 17
+                            email_notification_id: 27
+                            file_path: emails/attachments/gbi3LhLv22hUI4C8iogOFuLqAPs5zd1iAMCRJ5yg.txt
+                            created_at: '2022-06-10T00:08:50.000000Z'
+                            updated_at: '2022-06-10T00:08:50.000000Z'
+                      - id: 28
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:09:16.000000Z'
+                        updated_at: '2022-06-10T00:09:16.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 18
+                            email_notification_id: 28
+                            file_path: emails/attachments/KhiGUSioNKkQ9iEkt7Ersbhg8ayTrlSbuXeYfl0J.txt
+                            created_at: '2022-06-10T00:09:16.000000Z'
+                            updated_at: '2022-06-10T00:09:16.000000Z'
+                      - id: 29
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:15:43.000000Z'
+                        updated_at: '2022-06-10T00:15:43.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 19
+                            email_notification_id: 29
+                            file_path: emails/attachments/sscb9XPOjEBAYB8xpMag5Obx5ODfmcMU1LywhiH6.txt
+                            created_at: '2022-06-10T00:15:43.000000Z'
+                            updated_at: '2022-06-10T00:15:43.000000Z'
+                      - id: 30
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:19:54.000000Z'
+                        updated_at: '2022-06-10T00:19:54.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 20
+                            email_notification_id: 30
+                            file_path: emails/attachments/n8NRuZCMQZq9NxBGG7JLDpxgzNMyE4GDyeFgEEt2.txt
+                            created_at: '2022-06-10T00:19:54.000000Z'
+                            updated_at: '2022-06-10T00:19:54.000000Z'
+                      - id: 31
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:20:32.000000Z'
+                        updated_at: '2022-06-10T00:20:32.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 21
+                            email_notification_id: 31
+                            file_path: emails/attachments/OctPXPt0kE8tfVsXVjMvClCwThrVv5un0TwMaxZg.txt
+                            created_at: '2022-06-10T00:20:32.000000Z'
+                            updated_at: '2022-06-10T00:20:32.000000Z'
+                      - id: 32
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:20:52.000000Z'
+                        updated_at: '2022-06-10T00:20:52.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 22
+                            email_notification_id: 32
+                            file_path: emails/attachments/XRlsOAJi6A2fYskAS1OeXKKMzxzxrLtSU15TucPG.txt
+                            created_at: '2022-06-10T00:20:53.000000Z'
+                            updated_at: '2022-06-10T00:20:53.000000Z'
+                      - id: 33
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:21:13.000000Z'
+                        updated_at: '2022-06-10T00:21:13.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 23
+                            email_notification_id: 33
+                            file_path: emails/attachments/NXZmpE0pnqBq1g7CU5WzAiYTw04v8z8DcBjvAhk0.txt
+                            created_at: '2022-06-10T00:21:13.000000Z'
+                            updated_at: '2022-06-10T00:21:13.000000Z'
+                      - id: 34
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:21:28.000000Z'
+                        updated_at: '2022-06-10T00:21:28.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 24
+                            email_notification_id: 34
+                            file_path: emails/attachments/GQ2RlDtgRXqLsuHYKCyBdiNyXl2ZtNYfDhY0W4Ip.txt
+                            created_at: '2022-06-10T00:21:29.000000Z'
+                            updated_at: '2022-06-10T00:21:29.000000Z'
+                      - id: 35
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:24:57.000000Z'
+                        updated_at: '2022-06-10T00:24:57.000000Z'
+                        status: posted
+                        attachments:
+                          - id: 25
+                            email_notification_id: 35
+                            file_path: emails/attachments/drbgj2FMu8d9cyOTQ92hP7hJQ1tsOFNnvk7j7TnZ.txt
+                            created_at: '2022-06-10T00:24:57.000000Z'
+                            updated_at: '2022-06-10T00:24:57.000000Z'
+                      - id: 36
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:52:43.000000Z'
+                        updated_at: '2022-06-10T00:52:43.000000Z'
+                        status: failed
+                        attachments:
+                          - id: 26
+                            email_notification_id: 36
+                            file_path: emails/attachments/Awn3d8dQVN9X8UIe4k3FlwSHr4Y5nVRkTFxcvqvE.txt
+                            created_at: '2022-06-10T00:52:43.000000Z'
+                            updated_at: '2022-06-10T00:52:43.000000Z'
+                      - id: 37
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:53:01.000000Z'
+                        updated_at: '2022-06-10T00:53:01.000000Z'
+                        status: failed
+                        attachments:
+                          - id: 27
+                            email_notification_id: 37
+                            file_path: emails/attachments/ryArvLWtO1U5jO3CcT4g1Vc70FO8dPIw0F64TbbA.txt
+                            created_at: '2022-06-10T00:53:01.000000Z'
+                            updated_at: '2022-06-10T00:53:01.000000Z'
+                      - id: 38
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T00:58:51.000000Z'
+                        updated_at: '2022-06-10T00:58:56.000000Z'
+                        status: sent
+                        attachments:
+                          - id: 28
+                            email_notification_id: 38
+                            file_path: emails/attachments/EFk1mmRnolBA4k0cgQK6vbsnxf2xoAEqSQMiG61d.txt
+                            created_at: '2022-06-10T00:58:51.000000Z'
+                            updated_at: '2022-06-10T00:58:51.000000Z'
+                      - id: 39
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: idris@idris.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:02:30.000000Z'
+                        updated_at: '2022-06-10T01:02:34.000000Z'
+                        status: sent
+                        attachments:
+                          - id: 29
+                            email_notification_id: 39
+                            file_path: emails/attachments/DXVrecQRQyHIIAm71ghF6m8tZ4yoW6f1b29qq16I.txt
+                            created_at: '2022-06-10T01:02:30.000000Z'
+                            updated_at: '2022-06-10T01:02:30.000000Z'
+                      - id: 40
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:05:19.000000Z'
+                        updated_at: '2022-06-10T01:05:23.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 41
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:26:43.000000Z'
+                        updated_at: '2022-06-10T01:26:46.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 42
+                        uuid: 37a6dfcc-0c0d-4b90-ae79-19dee1c89f5e
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:27:49.000000Z'
+                        updated_at: '2022-06-10T01:27:53.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 43
+                        uuid: 4ea41868-2d6f-4cbb-a0e5-e9f9c8bae95d
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:03:13.000000Z'
+                        updated_at: '2022-06-12T12:03:14.000000Z'
+                        status: failed
+                        attachments: []
+                      - id: 44
+                        uuid: 4d4fb985-4265-4009-8762-2a0a97cab07c
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:03:39.000000Z'
+                        updated_at: '2022-06-12T12:03:39.000000Z'
+                        status: failed
+                        attachments: []
+                      - id: 45
+                        uuid: a9bbd7c6-146c-4b9b-9da9-bd4bf7881b0e
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:04:44.000000Z'
+                        updated_at: '2022-06-12T12:04:44.000000Z'
+                        status: posted
+                        attachments: []
+                    errors: null
+      operationId: get-emails
+      description: Get all emails notifications
+  /emails/stats:
+    get:
+      summary: Get all emails stats
+      tags: []
+      responses:
+        '200':
+          description: Stats fetched successfully
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  data:
+                    type: object
+                    properties:
+                      countPosted:
+                        type: number
+                      countSent:
+                        type: number
+                      countFailed:
+                        type: number
+                    required:
+                      - countPosted
+                      - countSent
+                      - countFailed
+                  errors: {}
+                required:
+                  - message
+                  - data
+                x-examples:
+                  example-1:
+                    message: Stats fetched successfully
+                    data:
+                      countPosted: 31
+                      countSent: 5
+                      countFailed: 4
+                    errors: null
+              examples:
+                example-1:
+                  value:
+                    message: Stats fetched successfully
+                    data:
+                      countPosted: 31
+                      countSent: 5
+                      countFailed: 4
+                    errors: null
+      operationId: get-emails-stats
+      description: Get the count of all emails by status
+  /emails/receiver:
+    get:
+      summary: Get Emails by receiver
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  data:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      required:
+                        - id
+                        - uuid
+                        - sender
+                        - receiver
+                        - subject
+                        - body
+                        - created_at
+                        - updated_at
+                        - status
+                      properties:
+                        id:
+                          type: number
+                        uuid:
+                          type: string
+                          minLength: 1
+                        sender:
+                          type: string
+                          minLength: 1
+                        receiver:
+                          type: string
+                          minLength: 1
+                        subject:
+                          type: string
+                          minLength: 1
+                        body:
+                          type: string
+                          minLength: 1
+                        html_body: {}
+                        sent_at: {}
+                        retry_at: {}
+                        created_at:
+                          type: string
+                          minLength: 1
+                        updated_at:
+                          type: string
+                          minLength: 1
+                        status:
+                          type: string
+                          minLength: 1
+                        attachments:
+                          type: array
+                          items:
+                            required: []
+                            properties: {}
+                  errors: {}
+                required:
+                  - message
+                  - data
+                x-examples:
+                  example-1:
+                    message: Emails fetched successfully
+                    data:
+                      - id: 1
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email
+                        body: I am testing this
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:38:48.000000Z'
+                        updated_at: '2022-06-09T22:38:48.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 40
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:05:19.000000Z'
+                        updated_at: '2022-06-10T01:05:23.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 41
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:26:43.000000Z'
+                        updated_at: '2022-06-10T01:26:46.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 42
+                        uuid: 37a6dfcc-0c0d-4b90-ae79-19dee1c89f5e
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:27:49.000000Z'
+                        updated_at: '2022-06-10T01:27:53.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 43
+                        uuid: 4ea41868-2d6f-4cbb-a0e5-e9f9c8bae95d
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:03:13.000000Z'
+                        updated_at: '2022-06-12T12:03:14.000000Z'
+                        status: failed
+                        attachments: []
+                      - id: 44
+                        uuid: 4d4fb985-4265-4009-8762-2a0a97cab07c
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:03:39.000000Z'
+                        updated_at: '2022-06-12T12:03:39.000000Z'
+                        status: failed
+                        attachments: []
+                      - id: 45
+                        uuid: a9bbd7c6-146c-4b9b-9da9-bd4bf7881b0e
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:04:44.000000Z'
+                        updated_at: '2022-06-12T12:04:44.000000Z'
+                        status: posted
+                        attachments: []
+                    errors: null
+              examples:
+                example-1:
+                  value:
+                    message: Emails fetched successfully
+                    data:
+                      - id: 1
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email
+                        body: I am testing this
+                        html_body: null
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-09T22:38:48.000000Z'
+                        updated_at: '2022-06-09T22:38:48.000000Z'
+                        status: posted
+                        attachments: []
+                      - id: 40
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:05:19.000000Z'
+                        updated_at: '2022-06-10T01:05:23.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 41
+                        uuid: 24eaad33-5906-4576-8747-8f7936749c10
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:26:43.000000Z'
+                        updated_at: '2022-06-10T01:26:46.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 42
+                        uuid: 37a6dfcc-0c0d-4b90-ae79-19dee1c89f5e
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-10T01:27:49.000000Z'
+                        updated_at: '2022-06-10T01:27:53.000000Z'
+                        status: sent
+                        attachments: []
+                      - id: 43
+                        uuid: 4ea41868-2d6f-4cbb-a0e5-e9f9c8bae95d
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:03:13.000000Z'
+                        updated_at: '2022-06-12T12:03:14.000000Z'
+                        status: failed
+                        attachments: []
+                      - id: 44
+                        uuid: 4d4fb985-4265-4009-8762-2a0a97cab07c
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:03:39.000000Z'
+                        updated_at: '2022-06-12T12:03:39.000000Z'
+                        status: failed
+                        attachments: []
+                      - id: 45
+                        uuid: a9bbd7c6-146c-4b9b-9da9-bd4bf7881b0e
+                        sender: idris@idris.co
+                        receiver: lawal@lawal.co
+                        subject: Test email 2
+                        body: I am testing this 2
+                        html_body: <b>I am a strong text</b>
+                        sent_at: null
+                        retry_at: null
+                        created_at: '2022-06-12T12:04:44.000000Z'
+                        updated_at: '2022-06-12T12:04:44.000000Z'
+                        status: posted
+                        attachments: []
+                    errors: null
+      operationId: get-emails-receiver
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: receiver
+          description: The receiver email
+          required: true
+components:
+  schemas: {}
